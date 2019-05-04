@@ -1,0 +1,16 @@
+{
+  "name": "express-basic",
+  "version": "1.0.0",
+  "description": "hello world",
+  "main": "true",
+  "author": "anwarulislam",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "nodemon": "^1.19.0"
+  }
+}

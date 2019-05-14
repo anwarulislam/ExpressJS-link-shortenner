@@ -1,6 +1,52 @@
 const User = require('./../models/User')
 const bcrypt = require('bcryptjs')
 
+module.exports.login = async (req, res) => {
+    //Username is required
+    if (req.body.username.length == 0)
+        req.check('username', 'Username is required').custom(() => {
+            return false
+        })
+    else
+        req.check('username', 'Username should be atleast 3 character').isLength({ min: 3 })
+
+    //password 
+    if (req.body.password.length === 0)
+        req.check('password', 'Password is required').custom(() => false)
+    else
+        req.check('password', 'Password should be atleast 5 character').isLength({ min: 5 })
+
+    // Check false return to save data
+    if (!req.validationErrors()) {
+
+        let { username, password } = req.body
+        //password = bcrypt.hashSync(password)
+
+        const user = await User.findOne({ username: username, password: password })
+        console.log(user)
+
+        try {
+            if (user) {
+                req.flash('success_msg', 'You have logged in successfully!!')
+                req.session.user = {
+                    username: user.username,
+                    email: user.email,
+                    name: user.name
+                }
+                res.redirect('/')
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    else {
+        // req.session.errors=req.validationErrors()
+        req.flash('errors', req.validationErrors())
+        res.redirect('back')
+    }
+}
+
 module.exports.register = async (req, res) => {
 
     //name is required
@@ -54,32 +100,34 @@ module.exports.register = async (req, res) => {
         req.check('password',
             'Password does not match').equals(req.body.confirm_password)
 
-
     // Check false return to save data
     if (!req.validationErrors()) {
 
         let { name, username, email, password } = req.body
-        password = bcrypt.hashSync(password)
-        const user = new User({ name, username, email, password })
+        //password = bcrypt.hashSync(password)
+        let new_user = new User({ name, username, email, password })
+
+        console.log(new_user)
 
         try {
-            const user = await user.save()
-            if (user)
+            let user = await new_user.save()
+            if (user) {
                 req.flash('success_msg', 'You have registered successfully!!')
-            res.redirect('/auth/login')
+                req.session.user = {
+                    username: user.username,
+                    email: user.email,
+                    name: user.name
+                }
+                res.redirect('/')
+            }
+
         } catch (error) {
-
+            console.log(error)
         }
-
     }
     else {
         // req.session.errors=req.validationErrors()
         req.flash('errors', req.validationErrors())
         res.redirect('back')
     }
-}
-
-
-module.exports.login = (req, res) => {
-    res.render('index')
 }

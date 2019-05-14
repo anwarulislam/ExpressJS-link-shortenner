@@ -10,6 +10,11 @@ Router.get('/login', (req, res) => {
     res.render('auth/login')
 })
 
+Router.get('/logout', (req, res) => {
+    req.session.user = null
+    res.redirect('/')
+})
+
 Router.post('/login', userController.login)
 
 Router.get('/register', (req, res) => {

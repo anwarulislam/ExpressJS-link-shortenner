@@ -22,6 +22,7 @@ app.use(flashConnect())
 
 app.use((req, res, next) => {
     app.locals.errors = req.flash('errors')
+    app.locals.user = req.session.user
     app.locals.success_msg = req.flash('success_msg')
     next()
 })

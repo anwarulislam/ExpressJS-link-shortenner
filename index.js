@@ -9,6 +9,8 @@ const flashConnect = require('connect-flash')
 require('dotenv').config()
 require('./dbconnect')
 
+const User = require('./models/User')
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(expressValidator())
@@ -20,10 +22,20 @@ app.use(expressSession({
 app.use(cookieParser())
 app.use(flashConnect())
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     app.locals.errors = req.flash('errors')
+
+    req.isAuthenticated = req.session.user ? true : false
+
+    if (req.isAuthenticated) {
+        console.log(true)
+        const user = await User.findOne({ username: req.session.user.username })
+        req.user = req.session.user
+    }
+
     app.locals.user = req.session.user
     app.locals.success_msg = req.flash('success_msg')
+
     next()
 })
 
@@ -32,7 +44,7 @@ app.get('/set', (req, res) => {
     res.send(`Session started`)
 })
 app.get('/get', (req, res) => {
-    res.json(req.session)
+    res.json(req.user)
 })
 
 app.set('view engine', 'ejs')

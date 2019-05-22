@@ -1,27 +1,26 @@
 const Router = require('express').Router()
 const userController = require('./../controllers/userController')
-
-Router.get('/', (req, res) => {
-    res.render('index')
-})
+const ifNotLogged = require('./../middlewares/ifNotLogged')
 
 
-Router.get('/login', (req, res) => {
+Router.get('/login', ifNotLogged, (req, res) => {
     res.render('auth/login')
 })
 
 Router.get('/logout', (req, res) => {
     req.session.user = null
+    req.flash('success_msg', 'You have successfully logged out')
     res.redirect('/')
 })
 
 Router.post('/login', userController.login)
 
-Router.get('/register', (req, res) => {
+Router.get('/register', ifNotLogged, (req, res) => {
     res.render('auth/register')
 })
 
 Router.post('/register', userController.register)
+
 Router.get('/forget_password', (req, res) => {
     res.render('auth/forget')
 })

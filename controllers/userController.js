@@ -3,13 +3,11 @@ const bcrypt = require('bcryptjs')
 
 module.exports.login = async (req, res) => {
     //Username is required
-    if (req.body.username.length == 0)
-        req.check('username', 'Username is required').custom(() => {
-            return false
-        })
-    else
+    if (req.body.username.length === 0)
+        req.check('username', 'Username is required').custom(() => false)
+    else {
         req.check('username', 'Username should be atleast 3 character').isLength({ min: 3 })
-
+    }
     //password 
     if (req.body.password.length === 0)
         req.check('password', 'Password is required').custom(() => false)
@@ -19,32 +17,42 @@ module.exports.login = async (req, res) => {
     // Check false return to save data
     if (!req.validationErrors()) {
 
-        let { username, password } = req.body
-        //password = bcrypt.hashSync(password)
+        const user = await User.findOne({ username: req.body.username })
+        if (!user) {
+            req.check('username', 'Username not found').custom(() => false)
+        }
+        if (user) {
 
-        const user = await User.findOne({ username: username, password: password })
-        console.log(user)
+            const passwordCheck = bcrypt.compareSync(req.body.password, user.password)
 
-        try {
-            if (user) {
-                req.flash('success_msg', 'You have logged in successfully!!')
-                req.session.user = {
-                    username: user.username,
-                    email: user.email,
-                    name: user.name
+            if (passwordCheck) {
+
+                try {
+                    if (user) {
+                        req.flash('success_msg', 'You have logged in successfully!!')
+                        req.session.user = {
+                            username: user.username,
+                            email: user.email,
+                            name: user.name
+                        }
+                        res.redirect('/')
+                    }
+
+                } catch (error) {
+                    console.log(error)
                 }
-                res.redirect('/')
+
             }
 
-        } catch (error) {
-            console.log(error)
+            req.check('password', 'Your password is wrong').custom(() => false)
         }
+
+
     }
-    else {
-        // req.session.errors=req.validationErrors()
-        req.flash('errors', req.validationErrors())
-        res.redirect('back')
-    }
+    // req.session.errors=req.validationErrors()
+    req.flash('errors', req.validationErrors())
+    res.redirect('back')
+
 }
 
 module.exports.register = async (req, res) => {
@@ -104,7 +112,7 @@ module.exports.register = async (req, res) => {
     if (!req.validationErrors()) {
 
         let { name, username, email, password } = req.body
-        //password = bcrypt.hashSync(password)
+        password = bcrypt.hashSync(password)
         let new_user = new User({ name, username, email, password })
 
         console.log(new_user)

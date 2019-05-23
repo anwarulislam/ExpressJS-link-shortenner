@@ -16,11 +16,22 @@
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <% if(user){ %>
-            <span class="mr-2"><%=user.name%></span>
-            <a href="/auth/logout" class="btn btn-outline-primary my-sm-0 mr-2">Logout</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download"
+                        aria-expanded="false"><%=user.name%> <span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="download">
+                        <a href="/auth/logout" class="dropdown-item">Logout</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/auth/settings" class="dropdown-item">Settings</a>
+                    </div>
+                </li>
+            </ul>
+
+
             <% } else{ %>
-            <a href="/auth/login" class="btn btn-outline-primary my-sm-0 mr-2">Login</a>
-            <a href="/auth/register" class="btn btn-outline-primary my-sm-0">Register</a>
+            <a href="/auth/login" class="btn btn-outline-success my-sm-0 mr-2">Login</a>
+            <a href="/auth/register" class="btn btn-outline-success my-sm-0">Register</a>
             <% } %>
         </form>
     </div>

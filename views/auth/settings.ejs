@@ -1,5 +1,9 @@
-<form action="/auth/register" method="POST">
+<form action="/auth/register" method="POST" enctype="multipart/form-data">
 
+    <div class="form-group">
+        <label for="photo"> Upload photo </label>
+        <input type="file" name="" id="photo" class="form-control-file">
+    </div>
     <div class="form-group">
         <label for="name"> Name </label>
         <input type="text" name="name" id="name" class="form-control">

@@ -11,12 +11,14 @@ require('./dbconnect')
 
 const User = require('./models/User')
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({
+    extended: true
+}))
 app.use(express.json())
 app.use(expressValidator())
 app.use(expressSession({
     secret: process.env.SECRET,
-    resave: true,
+    resave: null,
     saveUninitialized: true
 }))
 app.use(cookieParser())
@@ -28,12 +30,14 @@ app.use(async (req, res, next) => {
     req.isAuthenticated = req.session.user ? true : false
 
     if (req.isAuthenticated) {
-        console.log(true)
-        const user = await User.findOne({ username: req.session.user.username })
+
+        const user = await User.findOne({
+            username: req.session.user.username
+        })
         req.user = req.session.user
     }
-
     app.locals.user = req.session.user
+
     app.locals.success_msg = req.flash('success_msg')
 
     next()

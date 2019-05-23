@@ -1,6 +1,7 @@
 const Router = require('express').Router()
 const userController = require('./../controllers/userController')
 const ifNotLogged = require('./../middlewares/ifNotLogged')
+const ifLogged = require('./../middlewares/ifLogged')
 
 
 Router.get('/login', ifNotLogged, (req, res) => {
@@ -17,6 +18,10 @@ Router.post('/login', userController.login)
 
 Router.get('/register', ifNotLogged, (req, res) => {
     res.render('auth/register')
+})
+
+Router.get('/settings', ifLogged, (req, res) => {
+    res.render('auth/settings')
 })
 
 Router.post('/register', userController.register)

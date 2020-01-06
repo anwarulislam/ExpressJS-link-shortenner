@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index",
-    "dev": "nodemon index"
+    "dev": "nodemon index",
+    "git": "git add . && git commit -m urgent && git push origin master"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -17,7 +18,6 @@
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.1",
-    "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
     "express-joi-validation": "^4.0.3",
@@ -25,6 +25,7 @@
     "express-validator": "^5.3.1",
     "joi": "^14.3.1",
     "mongoose": "^5.5.7",
+    "mongoose-delete": "^0.5.1",
     "mongoose-mpath": "^2.0.28",
     "node-sass": "^4.13.0",
     "passport": "^0.4.1",

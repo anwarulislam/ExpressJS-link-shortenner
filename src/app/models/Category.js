@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const mpath = require('mongoose-mpath')
+const mPath = require('mongoose-mpath')
+const softDelete = require('mongoose-delete')
 
 const CategorySchema = new mongoose.Schema(
     {
@@ -13,6 +14,7 @@ const CategorySchema = new mongoose.Schema(
     }
 )
 
-CategorySchema.plugin(mpath)
+CategorySchema.plugin(mPath)
+CategorySchema.plugin(softDelete)
 
 module.exports = mongoose.model('categories', CategorySchema)

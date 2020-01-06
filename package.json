@@ -2,11 +2,13 @@
   "name": "express-basic",
   "version": "1.0.0",
   "description": "hello world",
-  "main": "true",
   "author": "anwarulislam",
   "license": "MIT",
+  "type": "module",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index",
+    "dev": "nodemon index"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -15,12 +17,19 @@
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
+    "express-joi-validation": "^4.0.3",
     "express-session": "^1.16.1",
     "express-validator": "^5.3.1",
+    "joi": "^14.3.1",
     "mongoose": "^5.5.7",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "mongoose-mpath": "^2.0.28",
+    "node-sass": "^4.13.0",
+    "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
+    "passport-local": "^1.0.0",
+    "socket.io": "^2.3.0"
   }
 }

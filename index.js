@@ -1,68 +1,41 @@
-const express = require('express')
-const app = express()
-const expressEjsLayouts = require('express-ejs-layouts')
-const expressSession = require('express-session')
-const expressValidator = require('express-validator')
-const cookieParser = require('cookie-parser')
-const flashConnect = require('connect-flash')
+//setup Dependencies
+var express = require('express'),
+    app = express(),
+    port = (process.env.PORT || 3000);
 
 require('dotenv').config()
-require('./dbconnect')
+require('./src/app/config/db.config')
+require('./src/app/config/environment.config')(app, express)
+require('./src/app/routes')(app)
 
-const User = require('./models/User')
+//Run application over custom port
+const server = app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});
 
-app.use(express.urlencoded({
-    extended: true
-}))
-app.use(express.json())
-app.use(expressValidator())
-app.use(expressSession({
-    secret: process.env.SECRET,
-    resave: null,
-    saveUninitialized: true
-}))
-app.use(cookieParser())
-app.use(flashConnect())
+//Setup Socket.IO
+require('./src/app/config/socket.config')(server)
 
-app.use(async (req, res, next) => {
-    app.locals.errors = req.flash('errors')
 
-    req.isAuthenticated = req.session.user ? true : false
+///////////////////////////////////////////
+//              Routes                   //
+///////////////////////////////////////////
 
-    if (req.isAuthenticated) {
+/////// ADD ALL YOUR ROUTES HERE  /////////
 
-        const user = await User.findOne({
-            username: req.session.user.username
-        })
-        req.user = req.session.user
-    }
-    app.locals.user = req.session.user
 
-    app.locals.success_msg = req.flash('success_msg')
+//A Route for Creating a 500 Error (Useful to keep around)
+app.get('/500', function (req, res) {
+    throw new Error('This is a 500 Error');
+});
 
-    next()
-})
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('/*', function (req, res) {
+    throw new NotFound;
+});
 
-app.get('/set', (req, res) => {
-    req.session.name = req.query.name
-    res.send(`Session started`)
-})
-app.get('/get', (req, res) => {
-    res.json(req.user)
-})
-
-app.set('view engine', 'ejs')
-app.use(expressEjsLayouts)
-
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running at http://localhost:${process.env.PORT}`);
-})
-
-app.use(express.static(__dirname + '/public'))
-
-const authRouter = require('./routes/auth')
-const commonRoute = require('./routes/common')
-const shortenerRoute = require('./routes/shortener')
-app.use('/auth', authRouter)
-app.use(commonRoute)
-app.use(shortenerRoute)
+function NotFound(msg) {
+    this.name = 'NotFound';
+    Error.call(this, msg);
+    Error.captureStackTrace(this, arguments.callee);
+}

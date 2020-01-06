@@ -35,7 +35,9 @@ module.exports.login = async (req, res) => {
                             email: user.email,
                             name: user.name
                         }
-                        res.redirect('/')
+
+                        console.log('hello peyechi');
+                        res.redirect('back')
                     }
 
                 } catch (error) {

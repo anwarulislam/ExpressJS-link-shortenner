@@ -1,9 +1,25 @@
 // User all route file to app
-const userSchema = require('./../validators/user')
-const validator = require('./../validators')
-const { handleError, ErrorHandler } = require('./../helpers/error')
+import { handleError, ErrorHandler } from './../helpers/error'
+import validate from '../validators';
+import UserSchema from '../validators/user';
 
-module.exports = (app) => {
+const Routes = (app) => {
+
+    //A Route for Creating a 500 Error (Useful to keep around)
+    app.get('/500', function (req, res) {
+        throw new Error('This is a 500 Error');
+    });
+
+    //The 404 Route (ALWAYS Keep this as the last route)
+    app.get('/*', function (req, res) {
+        throw new NotFound;
+    });
+
+    function NotFound(msg) {
+        this.name = 'NotFound';
+        Error.call(this, msg);
+        Error.captureStackTrace(this, arguments.callee);
+    }
 
     app.use(async (req, res, next) => {
         app.locals.errors = req.flash('errors')
@@ -32,9 +48,11 @@ module.exports = (app) => {
         res.render('index')
     })
 
-    app.post('/api', validator(userSchema), (req, res) => {
+    app.post('/api', validate(UserSchema), (req, res) => {
         console.log('/update');
         throw new ErrorHandler(404, 'User with the specified email does not exists')
         // res.json(req.body);
     })
 }
+
+export default Routes

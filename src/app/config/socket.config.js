@@ -1,6 +1,6 @@
-const socket = require('socket.io')
+import socket from 'socket.io'
 
-module.exports = (server) => {
+const runSocket = (server) => {
     var io = socket.listen(server);
     io.sockets.on('connection', function (socket) {
         console.log('Client Connected');
@@ -13,3 +13,5 @@ module.exports = (server) => {
         });
     });
 }
+
+export default runSocket

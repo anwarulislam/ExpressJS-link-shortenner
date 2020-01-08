@@ -1,4 +1,5 @@
-const Joi = require('joi');
+import Joi from 'joi'
+
 const validate = (schema, property) => {
     return (req, res, next) => {
         const { error } = Joi.validate(req.body, schema)
@@ -15,4 +16,5 @@ const validate = (schema, property) => {
         }
     }
 }
-module.exports = validate
+
+export default validate

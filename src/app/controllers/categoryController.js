@@ -2,7 +2,24 @@ const categorySchema = require('./../models/Category')
 
 module.exports.index = async (req, res) => {
 
-    const data = await categorySchema.getAllChildren
+    const data = await categorySchema.find()
+    console.log(data)
+    res.json(data)
+}
+
+module.exports.indexById = async (req, res) => {
+    const id = req.params.id
+
+    const category = await categorySchema.findById(id)
+    var args = {
+        filters: {},
+        fields: "_id title",
+        minLevel: 1,
+        recursive: true,
+        allowEmptyChildren: false
+    }
+    // const data = await category.getChildrenTree(args)
+    const data = await categorySchema.getChildrenTree(args)
     console.log(data)
     res.json(data)
 }

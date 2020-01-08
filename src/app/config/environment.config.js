@@ -1,15 +1,15 @@
-const ejsLayout = require('express-ejs-layouts'),
-    expressSession = require('express-session'),
-    expressValidator = require('express-validator'),
-    cookieParser = require('cookie-parser'),
-    flashConnect = require('connect-flash'),
-    path = require('path'),
-    sass = require('node-sass'),
-    { handleError } = require('./../helpers/error'),
-    passport = require('passport')
+import ejsLayout from 'express-ejs-layouts'
+import expressSession from 'express-session'
+import expressValidator from 'express-validator'
+import cookieParser from 'cookie-parser'
+import flashConnect from 'connect-flash'
+import path from 'path'
+import sass from 'node-sass'
+import passport from 'passport'
+import { handleError } from './../helpers/error'
 
 
-module.exports = (app, express) => {
+const setEnvironment = (app, express) => {
     app.set('views', path.join(__dirname, '/../../views'))
     app.set('view engine', 'ejs')
     app.set('view options', { layout: false })
@@ -32,3 +32,5 @@ module.exports = (app, express) => {
     })
     app.use(passport.initialize())
 }
+
+export default setEnvironment

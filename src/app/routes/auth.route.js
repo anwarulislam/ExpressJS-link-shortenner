@@ -64,4 +64,12 @@ router.get('/github/callback', passport.authenticate('github', {
     failureFlash: true // allow flash messages
 }))
 
+//TWITTER
+router.get('/twitter', passport.authenticate('twitter'))
+router.get('/twitter/callback', passport.authenticate('twitter', {
+    successRedirect: '/', // redirect to the secure profile section
+    failureRedirect: '/auth/register', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+}))
+
 export default router

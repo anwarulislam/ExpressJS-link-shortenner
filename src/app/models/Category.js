@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
-const mPath = require('mongoose-mpath')
-const softDelete = require('mongoose-delete')
+import mongoose from 'mongoose'
+import mPath from 'mongoose-mpath'
+import softDelete from 'mongoose-delete'
 
 const CategorySchema = new mongoose.Schema(
     {

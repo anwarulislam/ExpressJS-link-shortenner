@@ -1,36 +1,29 @@
 "use strict";
 
-//setup Dependencies
-var express = require('express'),
-    app = express(),
-    port = process.env.PORT || 3000;
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require('dotenv').config();
+var _express = _interopRequireDefault(require("express"));
 
-require('./src/app/config/db.config');
+var _db = _interopRequireDefault(require("./app/config/db.config"));
 
-require('./src/app/config/environment.config')(app, express);
+var _environment = _interopRequireDefault(require("./app/config/environment.config"));
 
-require('./src/app/routes')(app); //Run application over custom port
+var _socket = _interopRequireDefault(require("./app/config/socket.config"));
+
+var _routes = _interopRequireDefault(require("./app/routes"));
+
+var _dotenv = _interopRequireDefault(require("dotenv"));
+
+_dotenv["default"].config(); //setup Dependencies
 
 
-var server = app.listen(port, function () {
-  console.log("Server is running at http://localhost:".concat(port));
+var app = (0, _express["default"])();
+(0, _db["default"])();
+(0, _environment["default"])(app, _express["default"]);
+(0, _routes["default"])(app); //Run application over custom port
+
+var server = app.listen(process.env.PORT || 3000, function () {
+  console.log("Server is running at http://localhost:".concat(process.env.PORT || 3000));
 }); //Setup Socket.IO
 
-require('./src/app/config/socket.config')(server); //A Route for Creating a 500 Error (Useful to keep around)
-
-
-app.get('/500', function (req, res) {
-  throw new Error('This is a 500 Error');
-}); //The 404 Route (ALWAYS Keep this as the last route)
-
-app.get('/*', function (req, res) {
-  throw new NotFound();
-});
-
-function NotFound(msg) {
-  this.name = 'NotFound';
-  Error.call(this, msg);
-  Error.captureStackTrace(this, arguments.callee);
-}
+(0, _socket["default"])(server);

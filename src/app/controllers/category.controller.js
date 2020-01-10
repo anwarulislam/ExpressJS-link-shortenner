@@ -1,13 +1,13 @@
 const categorySchema = require('./../models/Category')
 
-module.exports.index = async (req, res) => {
+const index = async (req, res) => {
 
     const data = await categorySchema.find()
     console.log(data)
     res.json(data)
 }
 
-module.exports.indexById = async (req, res) => {
+const indexById = async (req, res) => {
     const id = req.params.id
 
     const category = await categorySchema.findById(id)
@@ -25,7 +25,7 @@ module.exports.indexById = async (req, res) => {
 }
 
 
-module.exports.create = async (req, res) => {
+const create = async (req, res) => {
     const category = new categorySchema({
         title: req.body.title,
         parent: { _id: req.body.parent }
@@ -35,16 +35,20 @@ module.exports.create = async (req, res) => {
     res.json(data)
 }
 
-module.exports.update = async (req, res) => {
+const update = async (req, res) => {
     const id = req.params.id
     const data = await categorySchema.updateOne({ _id: id }, req.body)
 
     res.json(data)
 }
 
-module.exports.remove = async (req, res) => {
+const remove = async (req, res) => {
     const id = req.params.id
     const data = await categorySchema.deleteById(id)
 
     res.json(data)
+}
+
+export default {
+    index, indexById, create, update, remove
 }

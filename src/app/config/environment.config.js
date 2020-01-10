@@ -5,11 +5,11 @@ import cookieParser from 'cookie-parser'
 import flashConnect from 'connect-flash'
 import path from 'path'
 import sass from 'node-sass'
-import passport from 'passport'
 import { handleError } from './../helpers/error'
+import passportConfig from './passport.config'
 
 
-const setEnvironment = (app, express) => {
+const setEnvironment = (app, express, passport) => {
     app.set('views', path.join(__dirname, '/../../views'))
     app.set('view engine', 'ejs')
     app.set('view options', { layout: false })
@@ -31,6 +31,28 @@ const setEnvironment = (app, express) => {
         handleError(err, res);
     })
     app.use(passport.initialize())
+    app.use(passport.session())
+    //passport
+
+    passportConfig()
+    app.use(async (req, res, next) => {
+        app.locals.errors = req.flash('errors')
+
+        req.isAuthenticated = req.session.user ? true : false
+
+        if (req.isAuthenticated) {
+            console.log(req.session)
+            // const user = await User.findOne({
+            //     username: req.session.user.username
+            // })
+            req.user = req.session.user
+        }
+        app.locals.user = req.session.user
+
+        app.locals.success_msg = req.flash('success_msg')
+
+        next()
+    })
 }
 
 export default setEnvironment
